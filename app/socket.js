@@ -5,15 +5,7 @@ let socket;
 
 const createSocketConnection = () => {
   if (!socket) {
-    const hostname = window.location.hostname;
-    const port = window.location.port;
-
-    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
-    const serverUrl = isLocal
-      ? `http://localhost:4001`
-      : `https://tricky-boot-fox.cyclic.cloud`;
-
-    socket = io(serverUrl);
+    socket = io("https://tricky-boot-fox.cyclic.cloud");
 
     socket.on("connect", () => {
       console.log("Socket connected");
