@@ -5,7 +5,7 @@ let socket;
 
 const createSocketConnection = () => {
   if (!socket) {
-    socket = io("https://tricky-boot-fox.cyclic.cloud");
+    socket = io("https://backend-4sah.onrender.com/");
 
     socket.on("connect", () => {
       console.log("Socket connected");
