@@ -19,7 +19,7 @@ function Home() {
     queryKey: ["getData"],
     queryFn: () =>
       axios
-        .get("https://tricky-boot-fox.cyclic.cloud/user")
+        .get("https://backend-4sah.onrender.com/user")
         .then((res) => res.data),
   });
 
@@ -27,7 +27,7 @@ function Home() {
     mutationKey: ["postImage"],
     mutationFn: (image) => {
       return axios.post(
-        "https://tricky-boot-fox.cyclic.cloud/cloudinary/upload",
+        "https://backend-4sah.onrender.com/cloudinary/upload",
         image
       );
     },
@@ -37,7 +37,7 @@ function Home() {
     mutationKey: ["postUser"],
     mutationFn: (user) => {
       console.log("what is user", user);
-      return axios.post("https://tricky-boot-fox.cyclic.cloud/user", user);
+      return axios.post("https://backend-4sah.onrender.com/user", user);
     },
     onSuccess: () => {
       return queryClient.invalidateQueries({
