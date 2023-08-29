@@ -2,6 +2,7 @@ import React from "react";
 
 function Task({ todo, deleteTask, updateTodo }) {
   const { id, task, description, completed } = todo;
+
   return (
     <div className="relative w-full bg-gray-800 mb-8 rounded-md px-8 py-4 max-w-[720px] m-auto overflow-hidden">
       <div
@@ -24,21 +25,18 @@ function Task({ todo, deleteTask, updateTodo }) {
         <button
           className={`${
             completed
-              ? "bg-secondary_green hover:bg-secondary_green/90 disabled:bg-secondary_green/20 "
-              : "bg-secondary_red hover:bg-secondary_red/90 active:scale-105 "
+              ? "bg-secondary_green/70 hover:bg-secondary_green/90 disabled:bg-secondary_green/20 "
+              : "bg-secondary_red/80 hover:bg-secondary_red/90 active:scale-105 "
           } rounded-md font-semibold px-4 py-2 text-white   ease-in-out duration-150 `}
-          disabled={completed ? "true" : false}
           onClick={() => {
             const body = {
               id: id,
-              task: task,
-              description: description,
               completed: !completed,
             };
             updateTodo(body);
           }}
         >
-          {completed ? <>Completed </> : <>Complete </>}
+          {completed ? "Completed" : "Complete"}
         </button>
       </div>
     </div>

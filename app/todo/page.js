@@ -7,6 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 import Modal from "@/components/Modal";
 import Task from "@/components/Task";
+import { queryClient } from "../providers";
 
 const override = {
   display: "block",
@@ -31,7 +32,11 @@ export default function Todo() {
       axios
         .delete(`https://backend-4sah.onrender.com/todo/${id}`)
         .then((res) => res.data),
-    onSuccess: (data) => console.log({ data }),
+    onSuccess: (_, variables) => {
+      const oldTodo = queryClient.getQueryData(["getData"]);
+      const newTodo = oldTodo.filter((todo) => todo.id !== variables);
+      queryClient.setQueriesData(["getData"], newTodo);
+    },
   });
 
   const { mutate: updateTodo, isSuccess: updateTodoSuccess } = useMutation({

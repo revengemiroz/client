@@ -6,7 +6,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createSocketConnection, disconnectSocket } from "./socket";
 import "@radix-ui/themes/styles.css";
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 export default function Providers({ children }) {
   // const [queryClient] = React.useState(() => new QueryClient());
