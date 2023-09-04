@@ -1,34 +1,81 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 
-import { useMutation, QueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/app/providers";
 
-export default function Modal({ isOpen, setIsOpen }) {
+import Spinner from "@/components/Spinner";
+
+export default function Modal({
+  isOpen,
+  setIsOpen,
+  notifySuccess,
+  isEdit,
+  selectedTodo,
+  updateTodo,
+}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    watch,
+    setValue,
   } = useForm();
 
-  const { mutate, isSuccess, isLoading } = useMutation({
+  const newTask = watch("task");
+  const newDescription = watch("description");
+  useEffect(() => {
+    if (isEdit) {
+      setValue("task", selectedTodo.task);
+      console.log("todo", selectedTodo);
+      setValue("description", selectedTodo.description);
+    }
+
+    return () => reset();
+  }, [isEdit]);
+
+  const { mutate, isLoading } = useMutation({
     mutationKey: ["postTask"],
     mutationFn: (task) => {
-      axios
+      return axios
         .post("https://backend-4sah.onrender.com/todo", task)
         .then((res) => res.data);
+    },
+    onSuccess: (data) => {
+      try {
+        queryClient.setQueryData(["getData"], (prevData) => {
+          if (prevData) {
+            return [data, ...prevData];
+          }
+          return prevData;
+        });
+        setIsOpen(false);
+        notifySuccess("Successfully Created");
+        reset();
+      } catch (error) {
+        console.log("what is error", e);
+      }
     },
   });
 
   const postTask = async (data) => {
-    await mutate(data);
-    if (!isLoading) {
-      closeModal();
+    if (isEdit) {
+      const body = {
+        id: selectedTodo.id,
+        task: newTask,
+        description: newDescription,
+      };
+      await updateTodo(body);
+    } else {
+      await mutate(data);
     }
   };
 
   function closeModal() {
+    reset();
     setIsOpen(false);
   }
 
@@ -89,19 +136,23 @@ export default function Modal({ isOpen, setIsOpen }) {
                     />
                   </div>
 
-                  <div className="mt-4  flex justify-end gap-4 items-center">
+                  <div className="mt-6 flex justify-between gap-4 items-center ">
                     <button
                       type="button"
-                      className="rounded-md border-2 px-4 py-[6px] capitalize border-red-400 text-red-300 active:scale-105 ease-in-out duration-150 hover:bg-red-400/20"
+                      className="rounded-md border-2 w-full flex justify-center items-center px-4 py-[6px] capitalize border-red-400 text-red-300 active:scale-105 ease-in-out duration-150 hover:bg-red-400/20"
                       onClick={closeModal}
                     >
-                      cancel
+                      Cancel
                     </button>
                     <button
                       type="submit"
-                      className="rounded-md  px-4 py-2 text-white bg-primary hover:bg-primary/90 active:scale-105 ease-in-out duration-150"
+                      className="rounded-md px-4 py-2 flex items-center justify-center text-white bg-primary hover:bg-primary/90 active:scale-105 ease-in-out duration-150  w-full"
                     >
-                      Save Task
+                      {isLoading ? (
+                        <Spinner size="h-5 w-5" className="text-white " />
+                      ) : (
+                        "Save Task"
+                      )}
                     </button>
                   </div>
                 </form>

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { createSocketConnection, disconnectSocket } from "./socket";
 import "@radix-ui/themes/styles.css";
+import { Toaster } from "react-hot-toast";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,7 @@ export default function Providers({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <Theme>{children}</Theme>
     </QueryClientProvider>
   );
