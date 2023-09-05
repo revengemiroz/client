@@ -121,6 +121,7 @@ export default function Todo() {
           selectedTodo={selectedTodo}
           updateTodo={updateTodo}
           loading={updateTodoSuccess}
+          notifyError={notifyError}
         />
 
         <div className="h-[80vh] relative  overflow-auto no-scrollbar mt-8">

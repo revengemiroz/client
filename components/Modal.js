@@ -16,6 +16,7 @@ export default function Modal({
   selectedTodo,
   updateTodo,
   loading,
+  notifyError,
 }) {
   const {
     register,
@@ -55,7 +56,9 @@ export default function Modal({
         setIsOpen(false);
         notifySuccess("Successfully Created");
         reset();
-      } catch (error) {}
+      } catch (error) {
+        notifyError(error.message);
+      }
     },
   });
 
