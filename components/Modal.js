@@ -15,6 +15,7 @@ export default function Modal({
   isEdit,
   selectedTodo,
   updateTodo,
+  loading,
 }) {
   const {
     register,
@@ -30,7 +31,6 @@ export default function Modal({
   useEffect(() => {
     if (isEdit) {
       setValue("task", selectedTodo.task);
-      console.log("todo", selectedTodo);
       setValue("description", selectedTodo.description);
     }
 
@@ -55,9 +55,7 @@ export default function Modal({
         setIsOpen(false);
         notifySuccess("Successfully Created");
         reset();
-      } catch (error) {
-        console.log("what is error", e);
-      }
+      } catch (error) {}
     },
   });
 
@@ -148,7 +146,7 @@ export default function Modal({
                       type="submit"
                       className="rounded-md px-4 py-2 flex items-center justify-center text-white bg-primary hover:bg-primary/90 active:scale-105 ease-in-out duration-150  w-full"
                     >
-                      {isLoading ? (
+                      {loading || isLoading ? (
                         <Spinner size="h-5 w-5" className="text-white " />
                       ) : (
                         "Save Task"

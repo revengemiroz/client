@@ -3,9 +3,9 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
+import Spinner from "@/components/Spinner";
 
 import Modal from "@/components/Modal";
 import Task from "@/components/Task";
@@ -23,9 +23,6 @@ export default function Todo() {
   const [selectedTodo, setSelectedTodo] = useState({});
 
   const {
-    register,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm();
 
@@ -104,7 +101,7 @@ export default function Todo() {
   }
 
   return (
-    <div className="w-full h-[100vh] bg-gray-900 pt-10 text-gray-300">
+    <div className="w-full border-2 border-red-200 h-[100vh] bg-gray-900 pt-10 text-gray-300">
       <div className="container  m-auto  p-4 ">
         <div className="w-full flex justify-center">
           <button
@@ -123,33 +120,30 @@ export default function Todo() {
           isEdit={isEdit}
           selectedTodo={selectedTodo}
           updateTodo={updateTodo}
+          loading={updateTodoSuccess}
         />
 
-        <div className="h-[80vh] overflow-auto no-scrollbar mt-8">
-          {isLoading && (
-            <div className="mx-auto mt-10">
-              <ClipLoader
-                color="#fffff"
-                size={120}
-                cssOverride={override}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
+        <div className="h-[80vh] relative  overflow-auto no-scrollbar mt-8">
+          {isLoading ? (
+            <div className="h-full flex items-center justify-center">
+              <Spinner size="h-8 w-8" />
+            </div>
+          ) : (
+            <div>
+              {!isLoading &&
+                !error &&
+                data?.map((task) => (
+                  <Task
+                    key={task.id}
+                    todo={task}
+                    deleteTask={deleteTask}
+                    updateTodo={updateTodo}
+                    setIsEdit={setIsEdit}
+                    setSelectedTodo={setSelectedTodo}
+                  />
+                ))}
             </div>
           )}
-
-          {!isLoading &&
-            !error &&
-            data?.map((task) => (
-              <Task
-                key={task.id}
-                todo={task}
-                deleteTask={deleteTask}
-                updateTodo={updateTodo}
-                setIsEdit={setIsEdit}
-                setSelectedTodo={setSelectedTodo}
-              />
-            ))}
         </div>
       </div>
     </div>
