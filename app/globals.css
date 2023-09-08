@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utitlities{
+  .border-red {
+    border-width: 2px;
+    border-color: theme('colors.red.200')
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

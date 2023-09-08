@@ -13,6 +13,12 @@ module.exports = {
         secondary_red: "#f9597a",
         secondary_green: "#54B435",
       },
+      borderWidth: {
+        red: "1px",
+      },
+      borderColor: {
+        red: "#e53e3e",
+      },
     },
   },
   plugins: [],
